@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[50,)"
+license="MIT"
+issueTrackerURL=""
+
+[[mods]]
+modId="planboard"
+version="${file.jarVersion}"
+displayName="Plan Board"
+description='''
+A Minecraft mod that syncs JEI bookmarks to a plan board
+and auto-extracts missing materials from containers.
+'''
+authors="Nnyjk"
+
+[[dependencies.planboard]]
+modId="neoforge"
+mandatory=true
+versionRange="[21.1.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.planboard]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.planboard]]
+modId="jei"
+mandatory=false
+versionRange="[15.4.0,)"
+ordering="AFTER"
+side="BOTH"

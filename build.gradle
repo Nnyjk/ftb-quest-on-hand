@@ -1,0 +1,103 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.142'
+    id 'game test base'
+}
+
+version = System.getenv("VERSION") ?: "0.0.1"
+group = "com.planboard"
+
+base {
+    archivesName = "plan-board"
+}
+
+repositories {
+    mavenCentral()
+}
+
+base {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava {
+    javac {
+        options.release = 21
+    }
+}
+
+dependencies {
+    // NeoForge
+    implementation "net.neoforged:neoforge:21.1.200"
+
+    // JEI
+    compileOnly "mezz.jei:jei-4neoforge:15.4.0.20"
+
+    // Testing
+    testRuntimeOnly "net.neoforged:neoforge:21.1.200"
+    testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
+    testImplementation "org.mockito:mockito-core:5.11.0"
+    testImplementation "net.neoforged.neoforge:neotest-annotations:1.3.3"
+
+    // GameTest
+    gametestRuntimeOnly "net.neoforged:neoforge:21.1.200"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching("com.planboard.core.**")
+    }
+}
+
+gamesTest {
+    useJUnitPlatform()
+    filter {
+        includeTestsMatching("com.planboard.gametest.**")
+    }
+}
+
+sourceSets {
+    gameTest {
+        java {
+            srcDirs = ['src/gameTest/java']
+            resources {
+                srcDirs = ['src/gameTest/resources']
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'com.planboard.neoforge.PlanBoardMod',
+            'Specification-Title': 'Plan Board',
+            'Specification-Version': '1',
+            'Specification-Vendor': 'Nnyjk',
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.jar.archiveVersion,
+            'Implementation-Vendor': 'Nnyjk'
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = "file://${project.projectDir}/repo"
+        }
+    }
+}
