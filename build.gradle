@@ -1,0 +1,13 @@
+// 根项目不打包，仅管理子模块
+plugins {
+    id 'java-library'
+}
+
+allprojects {
+    group = 'com.ftbquestonhand'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+}

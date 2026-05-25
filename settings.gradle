@@ -1,0 +1,88 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases'
+        }
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/releases'
+        }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/releases'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugin {
+    id 'java-library'
+}
+
+rootProject.name = 'ftb-quest-on-hand'
+
+// 核心库 - 纯 Java，无 mod 依赖
+include 'core'
+project(':core') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+// API 接口层
+include 'api'
+project(':api') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    dependencies {
+        api project(':core')
+    }
+}
+
+// NeoForge 兼容层
+include 'neoforge'
+project(':neoforge') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+    dependencies {
+        implementation project(':core')
+        implementation project(':api')
+        implementation "net.neoforged:neoforge:21.4.218"
+    }
+}
+
+// Forge 兼容层
+include 'forge'
+project(':forge') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    dependencies {
+        implementation project(':core')
+        implementation project(':api')
+        implementation "net.minecraftforge:forge:1.20.4-49.0.30"
+    }
+}
+
+// Fabric 兼容层
+include 'fabric'
+project(':fabric') {
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    dependencies {
+        implementation project(':core')
+        implementation project(':api')
+        implementation "net.fabricmc:fabric-loader:0.15.11"
+        implementation "net.fabricmc.fabric-api:fabric-api:0.100.1+1.20.4"
+    }
+}
